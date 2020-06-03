@@ -1,0 +1,119 @@
+package aquarius0715.toolbreakworningplugin;
+
+import net.md_5.bungee.api.ChatMessageType;
+import net.md_5.bungee.api.chat.TextComponent;
+import org.bukkit.ChatColor;
+import org.bukkit.Sound;
+import org.bukkit.command.Command;
+import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
+import org.bukkit.event.Listener;
+import org.bukkit.event.player.PlayerItemDamageEvent;
+import org.bukkit.plugin.java.JavaPlugin;
+
+import java.util.HashMap;
+import java.util.Map;
+import java.util.UUID;
+
+
+public final class ToolBreakWorningPlugin extends JavaPlugin implements Listener {
+
+    Map<UUID, Boolean> settings = new HashMap<UUID, Boolean>();
+
+    @Override
+    public void onEnable() {
+        this.getServer().getPluginManager().registerEvents(this, this);
+        getCommand("tbw").setExecutor(this);
+        // Plugin startup logic
+    }
+
+    @Override
+    public void onDisable() {
+        // Plugin shutdown logic
+    }
+
+    @Override
+    public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
+        if (label.equalsIgnoreCase("tbw")) {
+            if (!(sender instanceof Player)) {
+                Player player = (Player) sender;
+                player.sendMessage("You cannot this");
+                return true;
+            }
+            if (args.length == 0) {
+                sender.sendMessage("===============ToolBreakWarningPlugin===============");
+                sender.sendMessage("このプラグインはツールの耐久値があといくつなのか、");
+                sender.sendMessage("そして壊れそうになると音で知らせてくれるプラグインです。");
+                sender.sendMessage("デフォルトではonになっています。");
+                sender.sendMessage("</tbw>: この説明画面を開きます。");
+                sender.sendMessage("</tbw on>: このプラグインを使用します。");
+                sender.sendMessage("</tbw off>: このプラグインの使用をやめます。");
+                sender.sendMessage("===============ToolBreakWarningPlugin===============");
+            }
+
+            if (args.length == 1) {
+                Player player = (Player) sender;
+
+                if (args[0].equalsIgnoreCase("on")) {
+                    settings.put(player.getUniqueId(), true);
+                    player.sendMessage("通知機能をオンにしました。");
+                } else if (args[0].equalsIgnoreCase("off")) {
+                    settings.put(player.getUniqueId(), false);
+                    player.sendMessage("通知機能をオフにしました。");
+                } else {
+                    sender.sendMessage("===============ToolBreakWarningPlugin===============");
+                    sender.sendMessage("このプラグインはツールの耐久値があといくつなのか、");
+                    sender.sendMessage("そして壊れそうになると音で知らせてくれるプラグインです。");
+                    sender.sendMessage("デフォルトではonになっています。");
+                    sender.sendMessage("tbw: この説明画面を開きます。");
+                    sender.sendMessage("tbw on: このプラグインを使用します。");
+                    sender.sendMessage("tbw off: このプラグインの使用をやめます。");
+                    sender.sendMessage("===============ToolBreakWarningPlugin===============");
+                }
+            }
+        }
+        return false;
+    }
+
+
+    @EventHandler(priority = EventPriority.LOWEST)
+    public void onPlayerItemDamageEvent(PlayerItemDamageEvent event) {
+        Player player = event.getPlayer();
+        int maxDurability = player.getItemInHand().getType().getMaxDurability();
+        int nowDurability = player.getItemInHand().getType().getMaxDurability() - player.getItemInHand().getDurability();
+
+        boolean contains = settings.containsKey(player.getUniqueId());
+        if (!contains) {
+            settings.put(player.getUniqueId(), true);
+        }
+        if (settings.get(player.getUniqueId()).equals(true)) {
+
+            if (nowDurability <= maxDurability * 0.3 && nowDurability >= maxDurability * 0.1) {
+                String message_warn = ChatColor.YELLOW + "" + ChatColor.BOLD + "(ツール名: " + player.getItemInHand().getType() +
+                        " / 最大耐久値: " + maxDurability +
+                        " / 現在の耐久値" + nowDurability + ")";
+                TextComponent component_warn = new TextComponent();
+                component_warn.setText(message_warn);
+                player.spigot().sendMessage(ChatMessageType.ACTION_BAR, component_warn);
+            } else if (nowDurability <= maxDurability * 0.1) {
+                String message_danger = ChatColor.DARK_RED + "" + ChatColor.BOLD + "(ツール名: " + player.getItemInHand().getType() +
+                        " / 最大耐久値: " + maxDurability +
+                        " / 現在の耐久値" + nowDurability + ")";
+                TextComponent component_danger = new TextComponent();
+                component_danger.setText(message_danger);
+                player.spigot().sendMessage(ChatMessageType.ACTION_BAR, component_danger);
+                player.playSound(player.getLocation(), Sound.ENTITY_ARROW_HIT_PLAYER, 1.0F, 8.0F);
+            } else {
+
+                String message = ChatColor.AQUA + "" + ChatColor.BOLD + "(ツール名: " + player.getItemInHand().getType() +
+                        " / 最大耐久値: " + maxDurability +
+                        " / 現在の耐久値" + nowDurability + ")";
+                TextComponent component = new TextComponent();
+                component.setText(message);
+                player.spigot().sendMessage(ChatMessageType.ACTION_BAR, component);
+            }
+        }
+    }
+}

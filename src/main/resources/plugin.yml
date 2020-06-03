@@ -1,0 +1,6 @@
+name: ToolBreakWorningPlugin
+version: 1.0.0
+main: aquarius0715.toolbreakworningplugin.ToolBreakWorningPlugin
+api-version: 1.12.2
+commands:
+  tbw:

@@ -91,25 +91,25 @@ public final class ToolBreakWorningPlugin extends JavaPlugin implements Listener
         if (settings.get(player.getUniqueId()).equals(true)) {
 
             if (nowDurability <= maxDurability * 0.3 && nowDurability >= maxDurability * 0.1) {
-                String message_warn = ChatColor.YELLOW + "" + ChatColor.BOLD + "(ツール名: " + player.getItemInHand().getType() +
+                String message = ChatColor.GRAY + "" + ChatColor.BOLD + "(ツール名: " + player.getItemInHand().getType() +
                         " / 最大耐久値: " + maxDurability +
-                        " / 現在の耐久値" + nowDurability + ")";
-                TextComponent component_warn = new TextComponent();
-                component_warn.setText(message_warn);
-                player.spigot().sendMessage(ChatMessageType.ACTION_BAR, component_warn);
+                        " /" + ChatColor.YELLOW + "" + ChatColor.BOLD + "現在の耐久値: " + nowDurability + ChatColor.GRAY + ChatColor.BOLD + ")";
+                TextComponent component = new TextComponent();
+                component.setText(message);
+                player.spigot().sendMessage(ChatMessageType.ACTION_BAR, component);
             } else if (nowDurability <= maxDurability * 0.1) {
-                String message_danger = ChatColor.DARK_RED + "" + ChatColor.BOLD + "(ツール名: " + player.getItemInHand().getType() +
+                String message = ChatColor.GRAY + "" + ChatColor.BOLD + "(ツール名: " + player.getItemInHand().getType() +
                         " / 最大耐久値: " + maxDurability +
-                        " / 現在の耐久値" + nowDurability + ")";
-                TextComponent component_danger = new TextComponent();
-                component_danger.setText(message_danger);
-                player.spigot().sendMessage(ChatMessageType.ACTION_BAR, component_danger);
+                        " /" + ChatColor.DARK_RED + "" + ChatColor.BOLD + "現在の耐久値: " + nowDurability + ChatColor.GRAY + ChatColor.BOLD + ")";
+                TextComponent component = new TextComponent();
+                component.setText(message);
+                player.spigot().sendMessage(ChatMessageType.ACTION_BAR, component);
                 player.playSound(player.getLocation(), Sound.ENTITY_ARROW_HIT_PLAYER, 1.0F, 8.0F);
             } else {
 
-                String message = ChatColor.AQUA + "" + ChatColor.BOLD + "(ツール名: " + player.getItemInHand().getType() +
+                String message = ChatColor.GRAY + "" + ChatColor.BOLD + "(ツール名: " + player.getItemInHand().getType() +
                         " / 最大耐久値: " + maxDurability +
-                        " / 現在の耐久値" + nowDurability + ")";
+                        " /" + ChatColor.AQUA + "" + ChatColor.BOLD + "現在の耐久値: " + nowDurability + ChatColor.GRAY + ChatColor.BOLD + ")";
                 TextComponent component = new TextComponent();
                 component.setText(message);
                 player.spigot().sendMessage(ChatMessageType.ACTION_BAR, component);

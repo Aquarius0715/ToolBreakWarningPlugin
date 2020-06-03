@@ -67,9 +67,9 @@ public final class ToolBreakWorningPlugin extends JavaPlugin implements Listener
                     sender.sendMessage("このプラグインはツールの耐久値があといくつなのか、");
                     sender.sendMessage("そして壊れそうになると音で知らせてくれるプラグインです。");
                     sender.sendMessage("デフォルトではonになっています。");
-                    sender.sendMessage("tbw: この説明画面を開きます。");
-                    sender.sendMessage("tbw on: このプラグインを使用します。");
-                    sender.sendMessage("tbw off: このプラグインの使用をやめます。");
+                    sender.sendMessage("</tbw>: この説明画面を開きます。");
+                    sender.sendMessage("</tbw on>: このプラグインを使用します。");
+                    sender.sendMessage("</tbw off>: このプラグインの使用をやめます。");
                     sender.sendMessage("===============ToolBreakWarningPlugin===============");
                 }
             }
